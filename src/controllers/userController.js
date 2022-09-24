@@ -25,7 +25,7 @@ const controllerPostUser = async (req, res, next) => {
         algorithm: 'HS256',
     };
 
-    const token = jwt.sign({ userEmail: user.email }, secret, jwtConfig);
+    const token = jwt.sign({ email }, secret, jwtConfig);
     
     res.status(200).json({ token });
    } catch (error) {
