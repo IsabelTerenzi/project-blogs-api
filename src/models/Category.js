@@ -13,10 +13,11 @@ const Category = (sequelize, DataTypes) => {
         underscored: true,
     });
 
-   // Category.associate = (models) => {
-    //    Category.hasOne(models.PostCategory,
-      //     { foreignKey: 'category_id', as: 'posts_categories' });
-  //  };
+    Category.associate = (models) => {
+        Category.hasMany(models.PostCategory,
+          { foreignKey: 'categoryId', as: 'posts_categories' });
+    };
+
     return Category;
 };
 
