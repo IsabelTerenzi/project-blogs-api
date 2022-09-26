@@ -16,5 +16,10 @@ const servicePostUser = async ({ email, password, displayName, image }) => {
 
     return token;
 };
+
+const serviceGetUsers = async () => {
+    const users = await User.findAll({ attributes: { exclude: ['password'] } });
+    return users;
+};
  
- module.exports = { servicePostUser };
+ module.exports = { servicePostUser, serviceGetUsers };
