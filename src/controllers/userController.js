@@ -1,15 +1,11 @@
 const userService = require('../services/userService');
 
-const controllerPostUser = async (req, res, next) => {
-   try {
-    const { displayName, email, password, image } = req.body;
+const controllerPostUser = async (req, res) => {
+    const { email, password, displayName, image } = req.body;
     
-    const createUser = await userService.servicePostUser({ displayName, email, password, image });
+    const createUser = await userService.servicePostUser({ email, password, displayName, image });
     
     return res.status(201).json({ token: createUser });
-   } catch (error) {
-    next(error);
-   }
 };
 
 module.exports = { controllerPostUser };

@@ -4,8 +4,8 @@ const { User } = require('../models');
 
 const secret = process.env.JWT_SECRET;
 
-const servicePostUser = async ({ displayName, email, password, image }) => {
-   await User.create({ displayName, email, password, image });
+const servicePostUser = async ({ email, password, displayName, image }) => {
+   await User.create({ email, password, displayName, image });
 
     const jwtConfig = {
         expiresIn: '7d',
