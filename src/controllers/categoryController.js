@@ -16,4 +16,13 @@ const controllerPostCategory = async (req, res, next) => {
     }
 };
 
-module.exports = { controllerPostCategory };
+const controllerGetCategories = async (req, res, next) => {
+    try {
+        const getCategories = await categoryService.serviceGetCategories();
+        res.status(200).json(getCategories);
+    } catch (error) {
+        next(error);
+    }
+};
+
+module.exports = { controllerPostCategory, controllerGetCategories };
