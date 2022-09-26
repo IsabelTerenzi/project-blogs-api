@@ -21,5 +21,10 @@ const serviceGetUsers = async () => {
     const users = await User.findAll({ attributes: { exclude: ['password'] } });
     return users;
 };
+
+const serviceGetUserById = async (id) => {
+    const user = await User.findOne({ where: { id }, attributes: { exclude: ['password'] } });
+    return user;
+};
  
- module.exports = { servicePostUser, serviceGetUsers };
+ module.exports = { servicePostUser, serviceGetUsers, serviceGetUserById };
