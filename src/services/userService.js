@@ -14,5 +14,9 @@ const serviceGetUserById = async (id) => {
     const user = await User.findOne({ where: { id }, attributes: { exclude: ['password'] } });
     return user;
 };
+
+const serviceDeleteUser = async (id) => {
+    await User.destroy({ where: { id } });
+};
  
- module.exports = { servicePostUser, serviceGetUsers, serviceGetUserById };
+ module.exports = { servicePostUser, serviceGetUsers, serviceGetUserById, serviceDeleteUser };

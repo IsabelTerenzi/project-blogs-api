@@ -47,4 +47,17 @@ const controllerGetUserById = async (req, res, next) => {
     }
 };
 
-module.exports = { controllerPostUser, controllerGetUsers, controllerGetUserById };
+const controllerDeleteUser = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        await userService.serviceDeleteUser(id);
+        res.status(204).end();
+    } catch (error) {
+        next(error);
+    }
+};
+
+module.exports = { controllerPostUser,
+    controllerGetUsers,
+    controllerGetUserById,
+    controllerDeleteUser };

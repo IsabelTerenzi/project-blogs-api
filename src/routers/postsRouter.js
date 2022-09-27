@@ -6,6 +6,8 @@ const postRouter = express.Router();
 
 postRouter.get('/', validateJWT, postController.controllerGetPosts);
 postRouter.get('/:id', validateJWT, postController.controllerGetPostById);
+// postRouter.post('/', validateJWT, postController.controllerCreatePost);
 postRouter.put('/:id', validateJWT, postController.controllerUpdatePost);
+postRouter.delete('/:id', validateJWT, postController.controllerDeletePost);
 
 module.exports = postRouter;

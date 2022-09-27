@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken');
-const { User } = require('../models');
 
 require('dotenv/config');
 
@@ -14,11 +13,8 @@ const validateJWT = async (req, res, next) => {
 
     try {
        const verify = jwt.verify(authorization, secret);
-       const userValid = await User.findOne({ where: { email: verify.email } });
 
-       if (!userValid) {
-        return res.status(401).json({ message: 'Unauthorized user' });
-       }
+       req.user = verify;
 
         next();
     } catch (error) {

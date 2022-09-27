@@ -16,10 +16,14 @@ const serviceGetPostById = async (id) => {
     return posts;
 };
 
+/* const servicePostPost = async ({ title, content, categoryIds }) => {
+    const newPost = await BlogPost.create({ title, content, categoryIds });
+    return newPost;
+};
+*/
+
 const serviceUpdatePost = async (id, title, content) => {
-    const post = await BlogPost.findOne({ where: { id } });
-    
-    await post.update({ title, content });
+    await BlogPost.update({ title, content }, { where: { id } });
     
    const newPost = await BlogPost.findOne({ where: { id },
         include: [{ model: User, as: 'user', attributes: { exclude: ['password'] } },
@@ -28,4 +32,12 @@ const serviceUpdatePost = async (id, title, content) => {
     return newPost;
 };
 
-module.exports = { serviceGetPosts, serviceGetPostById, serviceUpdatePost };
+const serviceDeletePost = async (id) => {
+    await BlogPost.destroy({ where: { id } });
+};
+
+module.exports = { serviceGetPosts,
+    serviceGetPostById,
+    // servicePostPost,
+    serviceUpdatePost,
+    serviceDeletePost };
