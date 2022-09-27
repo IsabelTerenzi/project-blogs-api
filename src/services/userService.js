@@ -15,8 +15,8 @@ const serviceGetUserById = async (id) => {
     return user;
 };
 
-const serviceDeleteUser = async (id) => {
-    await User.destroy({ where: { id } });
+const serviceDeleteUser = async (email) => {
+    await User.destroy({ where: { email } });
 };
  
  module.exports = { servicePostUser, serviceGetUsers, serviceGetUserById, serviceDeleteUser };

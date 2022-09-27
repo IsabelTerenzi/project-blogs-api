@@ -49,8 +49,8 @@ const controllerGetUserById = async (req, res, next) => {
 
 const controllerDeleteUser = async (req, res, next) => {
     try {
-        const { id } = req.params;
-        await userService.serviceDeleteUser(id);
+        const user = req.user.email;
+        await userService.serviceDeleteUser(user);
         res.status(204).end();
     } catch (error) {
         next(error);
