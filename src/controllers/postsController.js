@@ -66,22 +66,20 @@ const controllerGetPostById = async (req, res, next) => {
     try {
         const { id } = req.params;
         const emailUser = req.user.email;
-    
-       const userValid = await User.findOne({ where: { email: emailUser } });
-       const blogPostData = await BlogPost.findOne({ where: { id } });
 
-       if (blogPostData.userId !== userValid.id) {
-        return res.status(401).json({ message: 'Unauthorized user' });
-       }
-
+        const userValid = await User.findOne({ where: { email: emailUser } });
         const validPost = await postService.serviceGetPostById(id);
 
         if (!validPost) {
             return res.status(404).json({ message: 'Post does not exist' });
         }
+
+        if (validPost.userId !== userValid.id) {
+            return res.status(401).json({ message: 'Unauthorized user' });
+        }
         
-        await postService.serviceDeletePost(id);
-        res.status(204).end();
+       await postService.serviceDeletePost(id);
+        res.sendStatus(204);
     } catch (error) {
         next(error);
     }
