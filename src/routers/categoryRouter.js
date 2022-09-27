@@ -1,5 +1,5 @@
 const express = require('express');
-const validateJWT = require('../auth/validateJWT');
+const { validateJWT } = require('../auth/validateJWT');
 const categoryController = require('../controllers/categoryController');
 
 const categoryRouter = express.Router();

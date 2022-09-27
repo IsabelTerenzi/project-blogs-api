@@ -1,4 +1,5 @@
 const postService = require('../services/postService');
+// const { User } = require('../models');
 
 const controllerGetPosts = async (req, res, next) => {
     try {
@@ -24,4 +25,21 @@ const controllerGetPostById = async (req, res, next) => {
  }
 };
 
-module.exports = { controllerGetPosts, controllerGetPostById };
+ const controllerUpdatePost = async (req, res, next) => {
+    try {
+       const { id } = req.params;
+       const { title, content } = req.body; 
+
+        if (!title || !content) {
+            return res.status(400).json({ message: 'Some required fields are missing' });
+        }
+
+        const updatePost = await postService.serviceUpdatePost(id, title, content);
+
+        res.status(200).json(updatePost);
+    } catch (error) {
+        next(error);
+    }
+ };
+
+module.exports = { controllerGetPosts, controllerGetPostById, controllerUpdatePost };

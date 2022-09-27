@@ -16,4 +16,16 @@ const serviceGetPostById = async (id) => {
     return posts;
 };
 
-module.exports = { serviceGetPosts, serviceGetPostById };
+const serviceUpdatePost = async (id, title, content) => {
+    const post = await BlogPost.findOne({ where: { id } });
+    
+    await post.update({ title, content });
+    
+   const newPost = await BlogPost.findOne({ where: { id },
+        include: [{ model: User, as: 'user', attributes: { exclude: ['password'] } },
+        { model: Category, as: 'categories' }],
+    });
+    return newPost;
+};
+
+module.exports = { serviceGetPosts, serviceGetPostById, serviceUpdatePost };
