@@ -10,6 +10,27 @@ const controllerGetPosts = async (req, res, next) => {
     }
 };
 
+const controllerSearchPost = async (req, res, next) => {
+    try {
+        const { q } = req.query;
+
+        if (!q) {
+            const getPosts = await postService.serviceGetPosts();
+            return res.status(200).json(getPosts);
+        }
+
+        const findPost = await postService.serviceSearchPost(q);
+
+        if (!findPost) {
+            return res.status(200).json([]);
+        }
+
+        res.status(200).json(findPost);
+    } catch (error) {
+        next(error);
+    }
+};
+
 const controllerGetPostById = async (req, res, next) => {
  try {
     const { id } = req.params;
@@ -28,7 +49,16 @@ const controllerGetPostById = async (req, res, next) => {
 /* const controllerCreatePost = async (req, res, next) => {
     try {
         const { title, content, categoryIds } = req.body;
-        const newPost = await postService.servicePostPost({ title, content, categoryIds });
+        const emailUser = req.user.email;
+    
+       const userValid = await User.findOne({ where: { email: emailUser } });
+       const blogPostData = await BlogPost.findOne({ where: { id } });
+
+       if (blogPostData.userId !== userValid.id) {
+        return res.status(401).json({ message: 'Unauthorized user' });
+       }
+
+        const newPost = await postService.servicePostPost({ title, content, userId });
 
         return res.status(201).json(newPost);
     } catch (error) {
@@ -68,24 +98,25 @@ const controllerGetPostById = async (req, res, next) => {
         const emailUser = req.user.email;
 
         const userValid = await User.findOne({ where: { email: emailUser } });
-        const validPost = await postService.serviceGetPostById(id);
+        const blogPostData = await BlogPost.findOne({ where: { id } });
 
-        if (!validPost) {
+        if (!blogPostData) {
             return res.status(404).json({ message: 'Post does not exist' });
         }
 
-        if (validPost.userId !== userValid.id) {
+        if (blogPostData.userId !== userValid.id) {
             return res.status(401).json({ message: 'Unauthorized user' });
         }
         
        await postService.serviceDeletePost(id);
-        res.sendStatus(204);
+        res.status(204).end();
     } catch (error) {
         next(error);
     }
  };
 
 module.exports = { controllerGetPosts,
+    controllerSearchPost,
     controllerGetPostById,
     // controllerCreatePost,
     controllerUpdatePost,
