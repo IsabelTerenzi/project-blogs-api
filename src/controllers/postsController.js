@@ -1,5 +1,4 @@
 const postService = require('../services/postService');
-const { User, BlogPost } = require('../models');
 
 const controllerGetPosts = async (req, res, next) => {
     try {
@@ -46,39 +45,26 @@ const controllerGetPostById = async (req, res, next) => {
  }
 };
 
-/* const controllerCreatePost = async (req, res, next) => {
+ const controllerCreatePost = async (req, res, next) => {
     try {
         const { title, content, categoryIds } = req.body;
-        const emailUser = req.user.email;
-    
-       const userValid = await User.findOne({ where: { email: emailUser } });
-       const blogPostData = await BlogPost.findOne({ where: { id } });
 
-       if (blogPostData.userId !== userValid.id) {
-        return res.status(401).json({ message: 'Unauthorized user' });
-       }
+        if (!title || !content || !categoryIds) {
+            return res.status(400).json({ message: 'Some required fields are missing' }); 
+        }
 
-        const newPost = await postService.servicePostPost({ title, content, userId });
+        const newPost = await postService.servicePostPost(req.body);
 
         return res.status(201).json(newPost);
     } catch (error) {
         next(error);
     }
 };
-*/
 
  const controllerUpdatePost = async (req, res, next) => {
     try {
        const { id } = req.params;
        const { title, content } = req.body;
-       const emailUser = req.user.email;
-    
-       const userValid = await User.findOne({ where: { email: emailUser } });
-       const blogPostData = await BlogPost.findOne({ where: { id } });
-
-       if (blogPostData.userId !== userValid.id) {
-        return res.status(401).json({ message: 'Unauthorized user' });
-       }
 
         if (!title || !content) {
             return res.status(400).json({ message: 'Some required fields are missing' });
@@ -94,20 +80,7 @@ const controllerGetPostById = async (req, res, next) => {
 
  const controllerDeletePost = async (req, res, next) => {
     try {
-        const { id } = req.params;
-        const emailUser = req.user.email;
-
-        const userValid = await User.findOne({ where: { email: emailUser } });
-        const blogPostData = await BlogPost.findOne({ where: { id } });
-
-        if (!blogPostData) {
-            return res.status(404).json({ message: 'Post does not exist' });
-        }
-
-        if (blogPostData.userId !== userValid.id) {
-            return res.status(401).json({ message: 'Unauthorized user' });
-        }
-        
+       const { id } = req.params;        
        await postService.serviceDeletePost(id);
         res.status(204).end();
     } catch (error) {
@@ -118,6 +91,6 @@ const controllerGetPostById = async (req, res, next) => {
 module.exports = { controllerGetPosts,
     controllerSearchPost,
     controllerGetPostById,
-    // controllerCreatePost,
+    controllerCreatePost,
     controllerUpdatePost,
     controllerDeletePost };

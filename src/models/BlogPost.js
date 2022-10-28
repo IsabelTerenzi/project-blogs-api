@@ -9,7 +9,7 @@ const BlogPost = (sequelize, DataTypes) => {
         content: DataTypes.STRING,
         userId: {
            type: DataTypes.INTEGER,
-           foreignKey: true,
+           foreignKey: true,          
 
         },
         published: DataTypes.DATE,

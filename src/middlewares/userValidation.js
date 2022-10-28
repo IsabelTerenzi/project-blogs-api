@@ -1,4 +1,4 @@
-const { User } = require('../models');
+const { User, BlogPost } = require('../models');
 
 const namePasswordValidation = async (req, res, next) => {
     const { email, displayName, password } = req.body;
@@ -32,4 +32,21 @@ const emailValidation = async (req, res, next) => {
     next();
 };
 
-module.exports = { namePasswordValidation, emailValidation };
+const authorizedUser = async (req, res, next) => {
+    const { id } = req.params;
+    const emailUser = req.user.email;
+
+        const userValid = await User.findOne({ where: { email: emailUser } });
+        const blogPostData = await BlogPost.findOne({ where: { id } });
+
+        if (!blogPostData) {
+            return res.status(404).json({ message: 'Post does not exist' });
+        }
+
+        if (blogPostData.userId !== userValid.id) {
+            return res.status(401).json({ message: 'Unauthorized user' });
+        }
+        next();
+};
+
+module.exports = { namePasswordValidation, emailValidation, authorizedUser };
